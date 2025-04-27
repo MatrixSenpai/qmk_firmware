@@ -19,7 +19,7 @@
         "extrakey": true,
         "mousekey": true
     },
-    "development_board": "promicro",
+    "development_board": "promicro_rp2040",
     "rgb_matrix": {
         "driver": "ws2812",
         "split_count": [29, 29],
