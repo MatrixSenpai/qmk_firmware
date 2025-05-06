@@ -126,20 +126,27 @@ bool oled_task_user(void) {
     return false;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch(get_highest_layer(state)) {
-        case _SM:
-            rgb_matrix_mode(RGB_MATRIX_BREATHING);
-            break;
-        case _GL:
-            rgb_matrix_mode(RGB_MATRIX_PIXEL_RAIN);
-            break;
-        case _SA:
-        case _AL:
-            rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
-            break;
-        default:
-            rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+layer_state_t g_last_default_layer;
+
+void housekeeping_task_user(void) {
+    layer_state_t current_default_layer = layer_state | default_layer_state;
+
+    if(current_default_layer != g_last_default_layer) {
+        g_last_default_layer = current_default_layer;
+
+        switch(get_highest_layer(g_last_default_layer)) {
+            case _SM:
+                rgb_matrix_mode(RGB_MATRIX_PIXEL_FLOW);
+                break;
+            case _GL:
+                rgb_matrix_mode(RGB_MATRIX_PIXEL_RAIN);
+                break;
+            case _SA:
+            case _AL:
+                rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+                break;
+            default:
+                rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+        }
     }
-    return state;
 }
